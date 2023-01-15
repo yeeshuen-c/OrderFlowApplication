@@ -3,20 +3,24 @@ package com.example.demo2;
 import java.util.ArrayList;
 //import disc.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import static javafx.geometry.HPos.RIGHT;
 //import order.Order;
 
 
@@ -31,6 +35,8 @@ public class Aims extends Application {
     static Order anOrder = new Order();
     static Order myOrder = new Order();
     static int pay = 0;
+
+    Scene primaryScene;
 
     public static void main(String[] args) {
         DigitalVideoDisc dvd1 = new DigitalVideoDisc("The Lion King");
@@ -157,8 +163,103 @@ public class Aims extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane primaryPane = new BorderPane();
 
+        BorderPane logInPane = new BorderPane();
+//        Scene logInScene = new Scene(logInPane, 1000, 500);
+//        primaryStage.setScene(logInScene);
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        //行列之间的间隔
+        grid.setHgap(10);
+        grid.setVgap(10);
+        //面板边缘周围的间隔
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        Text scenetitle = new Text("Welcome");
+        scenetitle.setStyle("-fx-font: 50 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e");
+        scenetitle.setLayoutX(150);
+        scenetitle.setLayoutY(150);
+        grid.add(scenetitle, 0, 0, 2, 1);
+
+        Label userName = new Label("User Name:");
+        userName.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        userName.setLayoutX(50);
+        userName.setLayoutY(50);
+        grid.add(userName, 0, 1);
+
+        TextField name = new TextField();
+        name.setPromptText("Enter your name.");
+        grid.add(name, 1, 1);
+
+        Label pw = new Label("Password:");
+        pw.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        pw.setLayoutX(50);
+        pw.setLayoutY(50);
+        grid.add(pw, 0, 2);
+
+        PasswordField passwordField = new PasswordField();
+        name.setPromptText("Enter your password.");
+        grid.add(passwordField, 1, 2);
+
+        Button btn = new Button("Sign in");
+        btn.setMaxWidth(120);
+        btn.setMaxHeight(90);
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.getChildren().add(btn);
+        grid.add(hbBtn, 1, 4);
+
+        final Text text = new Text();
+        grid.add(text, 0, 6);
+        GridPane.setColumnSpan(text, 2);
+        GridPane.setHalignment(text, RIGHT);
+
+        Label titleLabel2 = new Label("Order Management Application");
+        titleLabel2.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e; -fx-background-color: #edd382");
+        titleLabel2.setAlignment(Pos.CENTER);
+        titleLabel2.setPrefWidth(1000);
+        titleLabel2.setPrefHeight(60);
+
+        Image image = new Image("D:\\code\\Java\\demo2\\images\\bookstore2.jpg");
+        ImageView imageView = new ImageView(image);
+        //Setting the position of the image
+        imageView.setX(50);
+        imageView.setY(25);
+        //setting the fit height and width of the image view
+        imageView.setFitHeight(455);
+        imageView.setFitWidth(1000);
+//        grid.getChildren().add(imageView);
+
+        StackPane spane= new StackPane();
+        spane.getChildren().addAll(imageView,grid);
+
+        logInPane.setTop(titleLabel2);
+        logInPane.setCenter(spane);
+        Scene logInScene = new Scene(logInPane, 1000, 500);
+        primaryStage.setScene(logInScene);
+        btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String nameField=name.getText().toString();
+                String password = passwordField.getText().toString();
+                if(name.getText().isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "InputError!",
+                            "Please enter your user name. ");
+                    return;
+                }
+                if(passwordField.getText().isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "InputError!",
+                            "Please enter your password. ");
+                    return;
+                }
+                primaryStage.setScene(primaryScene);
+            }
+        });
+
+        //scene after log in
+        BorderPane primaryPane = new BorderPane();
         ///////////////////// Khoi tao tieu de
         Label titleLabel = new Label("Order Management Application");
         titleLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #c0392b; -fx-background-color: #ecf0f1");
@@ -167,8 +268,8 @@ public class Aims extends Application {
         titleLabel.setPrefHeight(60);
         primaryPane.setTop(titleLabel);
 
-        Scene primaryScene = new Scene(primaryPane, 1000, 500);
-        primaryStage.setScene(primaryScene);
+        primaryScene = new Scene(primaryPane, 1000, 500);
+//        primaryStage.setScene(primaryScene);
 
         /////////////////////// Khoi tao Menu
         VBox menuBox = new VBox();
@@ -619,7 +720,7 @@ public class Aims extends Application {
                             listMediaItem.get(i).getItems().addAll(mediaTitle.get(i), mediaInfoPane.get(i));
                         }
                         Button payButton = new Button("Pay");
-                        payButton.setStyle("-fx-font-size: 20 System; -fx-text-fill: #cf000f; -fx-font-weight: Bold; -fx-background-color: #7befb2");
+                        payButton.setStyle("-fx-font-size: 20 System; -fx-text-fill: #020122; -fx-font-weight: Bold; -fx-background-color: #fc9e4f");
                         payButton.setAlignment(Pos.CENTER);
                         payButton.setPrefWidth(760);
                         listItemBox.getChildren().add(payButton);
@@ -629,22 +730,43 @@ public class Aims extends Application {
                                 payButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
+
+                                        String order="";
+                                        VBox vb= new VBox();
+
                                         if (anOrder.itemsOrdered.size() >= 1) {
+                                            Label orderTitle = new Label("Order Receipt");
+                                            orderTitle.setStyle("-fx-font: 50 System; -fx-text-fill: #f4442e; -fx-font-weight: Bold;");
+                                            orderTitle.setAlignment(Pos.CENTER);
+                                            orderTitle.setLayoutX(150);
+                                            orderTitle.setLayoutY(70);
+                                            vb.getChildren().add(orderTitle);
+
                                             for (int i = 0; i < anOrder.itemsOrdered.size(); i++) {
-                                                myOrder.addMedia(anOrder.itemsOrdered.get(i));
+                                                order=myOrder.addMedia(anOrder.itemsOrdered.get(i));
+                                                Label orderLabel = new Label(order);
+                                                orderLabel.setStyle("-fx-font: 15 System; -fx-text-fill: #020122");
+                                                orderLabel.setAlignment(Pos.BOTTOM_CENTER);
+                                                orderLabel.setLayoutX(150);
+                                                orderLabel.setLayoutY(70);
+                                                vb.getChildren().add(orderLabel);
                                             }
                                             Stage payStage = new Stage();
-                                            AnchorPane payPane = new AnchorPane();
+//                                            AnchorPane payPane = new AnchorPane();
+                                            BorderPane payPane= new BorderPane();
+//                                            payPane.setStyle("-fx-background-color: #edd382");
                                             if (anOrder.itemsOrdered.size() < 3) {
-                                                Label payLabel = new Label("Your total cost is: " + (anOrder.totalCost()) + "$");
-                                                payLabel.setStyle("-fx-font: 15 System; -fx-text-fill: #f62459");
+                                                Label payLabel = new Label("Total cost is: " + (anOrder.totalCost()) + "$");
+                                                payLabel.setStyle("-fx-font: 20 System; -fx-font-weight: Bold; -fx-text-fill: #020122");
                                                 payLabel.setAlignment(Pos.BOTTOM_CENTER);
-                                                payLabel.setLayoutX(100);
-                                                payLabel.setLayoutY(50);
-                                                payPane.getChildren().add(payLabel);
+                                                payLabel.setLayoutX(200);
+                                                payLabel.setLayoutY(90);
+//                                                payPane.getChildren().add(payLabel);
+                                                vb.getChildren().add(payLabel);
+                                                payPane.setTop(vb);
                                             } else {
                                                 Label luckyLabel = new Label("You get a lucky item: " + anOrder.itemsOrdered.get(anOrder.i).getTitle());
-                                                Label payLabel = new Label("Your total cost is: " + (anOrder.totalCost() - anOrder.itemsOrdered.get(anOrder.i).getCost()) + "$");
+                                                Label payLabel = new Label("Total cost is: " + (anOrder.totalCost() - anOrder.itemsOrdered.get(anOrder.i).getCost()) + "$");
                                                 payLabel.setStyle("-fx-font: 15 System; -fx-text-fill: #f62459");
                                                 payLabel.setAlignment(Pos.BOTTOM_CENTER);
                                                 payLabel.setLayoutX(100);
@@ -654,9 +776,25 @@ public class Aims extends Application {
                                                 luckyLabel.setAlignment(Pos.CENTER);
                                                 luckyLabel.setLayoutX(100);
                                                 luckyLabel.setLayoutY(75);
-                                                payPane.getChildren().add(luckyLabel);
+                                                payPane.setTop(luckyLabel);
                                             }
-                                            Scene payScene = new Scene(payPane, 600, 400);
+                                            Button printbtn= new Button("print receipt");
+                                            printbtn.setMaxHeight(30);
+                                            printbtn.setMaxWidth(100);
+                                            payPane.setCenter(printbtn);
+
+                                            Image image = new Image("D:\\code\\Java\\demo2\\images\\order.png");
+                                            ImageView imageView = new ImageView(image);
+                                            //Setting the position of the image
+                                            imageView.setX(50);
+                                            imageView.setY(25);
+                                            //setting the fit height and width of the image view
+                                            imageView.setFitHeight(455);
+                                            imageView.setFitWidth(1000);
+
+                                            StackPane spane2= new StackPane();
+                                            spane2.getChildren().addAll(imageView,payPane);
+                                            Scene payScene = new Scene(spane2, 600, 400);
                                             payStage.setScene(payScene);
                                             payStage.show();
                                             pay = 1;
@@ -771,7 +909,7 @@ public class Aims extends Application {
             public void handle(MouseEvent mouseEvent) {
                 contentPane.getChildren().clear();
                 Label titleDisplay = new Label("The items list of your order");
-                titleDisplay.setStyle("-fx-font: 30 System; -fx-font-weight: Bold; -fx-text-fill: #ecf0f1");
+                titleDisplay.setStyle("-fx-font: 30 System; -fx-font-weight: Bold; -fx-text-fill: #020122");
                 titleDisplay.setLayoutX(180);
 
                 ScrollPane listItemPane = new ScrollPane();
@@ -798,7 +936,7 @@ public class Aims extends Application {
 
                     mediaTitle.add(null);
                     mediaTitle.set(i, new Label(myOrder.itemsOrdered.get(i).getTitle()));
-                    mediaTitle.get(i).setStyle("-fx-font-size: 20 System; -fx-font-weight: Bold; -fx-text-fill: #4d13d1; -fx-background-color: #e8e8e8");
+                    mediaTitle.get(i).setStyle("-fx-font-size: 20 System; -fx-font-weight: Bold; -fx-text-fill: #020122; -fx-background-color: #e8e8e8");
                     mediaTitle.get(i).setAlignment(Pos.CENTER);
                     mediaTitle.get(i).setPrefSize(758, 31);
 
@@ -860,4 +998,13 @@ public class Aims extends Application {
         primaryStage.show();
         primaryStage.setResizable(false);
     }
+
+    private static void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
 }
+

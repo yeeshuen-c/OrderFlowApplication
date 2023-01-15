@@ -1,5 +1,7 @@
 package com.example.demo2;
 
+import javafx.scene.control.Alert;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -43,15 +45,36 @@ public class Order {
     /**
      * @param med
      */
-    public void addMedia(Media med) {
+    public String addMedia(Media med) {
+
+        String temp="";
+//        String order="";
+
         if (itemsOrdered.size() == MAX_NUMBERS_ORDERED) {
-            System.out.println("The order is almost full");
+//            System.out.println("The order is almost full");
+            Alert orderAlert = new Alert(Alert.AlertType.WARNING);
+            orderAlert.setTitle("order warning");
+            orderAlert.setHeaderText(null);
+            orderAlert.setContentText("The order is almost full");
+            orderAlert.show();
         } else {
             itemsOrdered.add(med);
-            System.out.println("The media (" + med.getTitle() + ", "
-                    + med.getCategory() + ", "
-                    + med.getCost() + ") has been added");
+//            System.out.println("The media (" + med.getTitle() + ", "
+//                    + med.getCategory() + ", "
+//                    + med.getCost() + ") has been added");
+
+            temp=med.getTitle()+", "+med.getCategory()+", "+med.getCost()+") \n";
+//            order +=temp;
+
+//            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+//            confirmAlert.setTitle("confirm ordering");
+//            confirmAlert.setHeaderText(null);
+//            confirmAlert.setContentText("The media (" + med.getTitle() + ", "
+//                    + med.getCategory() + ", "
+//                    + med.getCost() + ") has been added");
+//            confirmAlert.show();
         }
+        return temp;
     }
 
     /**
@@ -59,7 +82,7 @@ public class Order {
      */
     public void addMedia(Media[] medList) {
         if (itemsOrdered.size() + medList.length > MAX_NUMBERS_ORDERED) {
-            System.out.println("The order is almost full if you added");
+//            System.out.println("The order is almost full if you added");
         } else {
             for (int i = 0; i < medList.length; i++) {
                 this.addMedia(medList[i]);
@@ -143,6 +166,15 @@ public class Order {
         }
         System.out.println("Total cost: [" + this.totalCost() + "]");
         System.out.println("***************************************************");
+
+//        Alert orderAlert = new Alert(Alert.AlertType.INFORMATION);
+//        orderAlert.setTitle("Order Details");
+//        orderAlert.setHeaderText(null);
+//        orderAlert.setContentText("***********************Order***********************\n" +
+//                "Date: [\" + this.dateOrdered.getDay() + \" - \" + this.dateOrdered.getMonth()+ \" - \" + this.getDateOrdered\n" +
+//                "Ordered Items:\n" +
+//                "");
+//        orderAlert.show();
     }
 
     /**
