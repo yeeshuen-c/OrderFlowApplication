@@ -988,10 +988,34 @@ public class Aims extends Application {
             }
         });
         ///////////////////// Exit
+        BorderPane exitbp= new BorderPane();
+        Label titleLabel3 = new Label("Order Management Application");
+        titleLabel3.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e; -fx-background-color: #edd382");
+        titleLabel3.setAlignment(Pos.CENTER);
+        titleLabel3.setPrefWidth(1000);
+        titleLabel3.setPrefHeight(60);
+
+        Image payImage = new Image("D:\\code\\Java\\demo2\\images\\pay.jpg");
+        ImageView payImageView = new ImageView(payImage);
+        //Setting the position of the image
+        payImageView.setX(50);
+        payImageView.setY(25);
+        //setting the fit height and width of the image view
+        payImageView.setFitHeight(455);
+        payImageView.setFitWidth(1000);
+
+        StackPane exitspane= new StackPane();
+//        exitspane.getChildren().addAll(payImageView,grid);
+
+        exitbp.setTop(titleLabel3);
+        exitbp.setCenter(exitspane);
+        Scene exitScene = new Scene(exitbp, 1000, 500);
+
         exitLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                primaryStage.close();
+                primaryStage.setScene(exitScene);
+//                primaryStage.close();
             }
         });
 
