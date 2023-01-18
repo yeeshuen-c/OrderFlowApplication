@@ -35,6 +35,7 @@ public class Disc extends Media {
         super(title, category, cost);
         this.director = director;
         this.length = length;
+//        this.id_to_store=id_to_store;
     }
     /**
      * @return the length

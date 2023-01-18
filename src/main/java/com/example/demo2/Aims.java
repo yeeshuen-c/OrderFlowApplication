@@ -3,6 +3,8 @@ package com.example.demo2;
 import java.util.ArrayList;
 //import disc.*;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,6 +12,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -35,10 +38,18 @@ public class Aims extends Application {
     static Order anOrder = new Order();
     static Order myOrder = new Order();
     static int pay = 0;
-
+//newly added
     Scene primaryScene;
+    TableView<DigitalVideoDisc> dvdTable;
+    TableView<Book> bookTable;
+    TableView<CompactDisc> cdTable;
+    TextField director, length, title, category, cost;
+    TextField btitle, bcategory, bcost, bauthors;
+    TextField cddirector, cdlength, cdtitle, cdcategory, cdcost,cdartist;
+
 
     public static void main(String[] args) {
+        //to change to DVD table
         DigitalVideoDisc dvd1 = new DigitalVideoDisc("The Lion King");
         dvd1.setCategory("Animation");
         dvd1.setCost(19.95f);
@@ -63,6 +74,7 @@ public class Aims extends Application {
         dvd3.setId_to_store(2);
         dvd.add(dvd3);
 
+        //Book
         Book book1 = new Book("Analysis");
         author.add("Nguyen Dinh Tri");
         author.add("Tran viet Dung");
@@ -123,6 +135,7 @@ public class Aims extends Application {
         book5.setId_to_store(8);
         book.add(book5);
 
+        //CD
         CompactDisc cd1 = new CompactDisc("Conan");
         cd1.setArtist("Aoyama Gosho");
         cd1.setCategory("Detective");
@@ -161,28 +174,250 @@ public class Aims extends Application {
         System.exit(0);
     }
 
+    public ObservableList<DigitalVideoDisc> getDVD(){
+        ObservableList<DigitalVideoDisc> dvds= FXCollections.observableArrayList();
+        dvds.add(new DigitalVideoDisc("Roger Allers",87,"The Lion King","Animation",19.95f));
+        dvds.add(new DigitalVideoDisc("George Lucas",124,"Star Wars","Science Fiction",24.95f));
+        dvds.add(new DigitalVideoDisc("John Musker",90,"Aladdin","Animation",18.99f));
+
+        return dvds;
+    }
+    public ObservableList<Book> getBook(){
+        ObservableList<Book> books= FXCollections.observableArrayList();
+        author.add("Nguyen Dinh Tri");
+        author.add("Tran viet Dung");
+        author.add("Tran Xuan Hien");
+        author.add("Nguyen Xuan Thao");
+        books.add(new Book("Analysis","Lecture",1.2f,author));
+        books.add(new Book("Algebra","Lecture",1.2f,author));
+        author.clear();
+        author.add("Conan Doyle");
+        books.add(new Book( "Sherlock Holmes chapter 1","Detective",10.2f, author));
+        books.add(new Book("Sherlock Holmes chapter 2","Detective", 10.2f,author));
+        author.clear();
+        author.add("Earnest Hemingway");
+        books.add(new Book("The old man and the sea","Novel",10.2f, author));
+
+        return books;
+    }
+    public ObservableList<CompactDisc> getCD(){
+        ObservableList<CompactDisc> cds= FXCollections.observableArrayList();
+        cds.add(new CompactDisc("Aoyama Gosho", "Conan", 120, "Conan", "Detective", 14.4f));
+        cds.add(new CompactDisc("Fujiko F.Fujio", "Doraemon", 120,"Doraemon","Cartoon and Science Fiction",14.4f));
+        cds.add(new CompactDisc("Aoyama Gosho", "Pokemon", 120, "Pokemon", "Detective", 14.4f));
+
+        return cds;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+//////admin scene       wrong order,after login
+    // dvd table
+        TableColumn<DigitalVideoDisc,String> dirtCol= new TableColumn<>("Director Name");
+        dirtCol.setMinWidth(200);
+        dirtCol.setCellValueFactory(new PropertyValueFactory<>("director"));
+        TableColumn<DigitalVideoDisc,Integer> lenCol= new TableColumn<>("Length");
+        lenCol.setMinWidth(100);
+        lenCol.setCellValueFactory(new PropertyValueFactory<>("length"));
+        TableColumn<DigitalVideoDisc,String> ttlCol= new TableColumn<>("Title Name");
+        ttlCol.setMinWidth(200);
+        ttlCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TableColumn<DigitalVideoDisc,String> catCol= new TableColumn<>("Category Name");
+        catCol.setMinWidth(200);
+        catCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+        TableColumn<DigitalVideoDisc,Float> costCol= new TableColumn<>("Cost");
+        costCol.setMinWidth(100);
+        costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+        //text field to insert data
+        director =new TextField();director.setMinWidth(200); length=new TextField();length.setMinWidth(100);
+        title=new TextField();title.setMinWidth(200);  category=new TextField();category.setMinWidth(200);
+        cost=new TextField();cost.setMinWidth(100);
+    //dvd table view
+        dvdTable=new TableView<>();
+        dvdTable.setItems(getDVD());
+        dvdTable.getColumns().addAll(dirtCol,lenCol,ttlCol,catCol,costCol);
 
+    // book table
+        TableColumn<Book,String> titleCol= new TableColumn<>("TITLE");
+        titleCol.setMinWidth(200);
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TableColumn<Book,String> categoryCol= new TableColumn<>("CATEGORY");
+        categoryCol.setMinWidth(200);
+        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+        TableColumn<Book,Float> bcostCol= new TableColumn<>("COST");
+        bcostCol.setMinWidth(200);
+        bcostCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+        TableColumn<Book,ArrayList<String>> authorsCol= new TableColumn<>("AUTHORS");
+        authorsCol.setMinWidth(200);
+        authorsCol.setCellValueFactory(new PropertyValueFactory<>("authors"));
+        //text field to insert data
+        btitle = new TextField();  bcategory= new TextField(); bcost= new TextField(); bauthors= new TextField();
+        //book table view
+        bookTable=new TableView<>();
+        bookTable.setItems(getBook());
+        bookTable.getColumns().addAll(titleCol,categoryCol,bcostCol,authorsCol);
+
+    //cd table
+        TableColumn<CompactDisc,String> cddirtCol= new TableColumn<>("Director Name");
+        cddirtCol.setMinWidth(200);
+        cddirtCol.setCellValueFactory(new PropertyValueFactory<>("director"));
+        TableColumn<CompactDisc,Integer> cdlenCol= new TableColumn<>("Length");
+        cdlenCol.setMinWidth(100);
+        cdlenCol.setCellValueFactory(new PropertyValueFactory<>("length"));
+        TableColumn<CompactDisc,String> cdttlCol= new TableColumn<>("Title Name");
+        cdttlCol.setMinWidth(200);
+        cdttlCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TableColumn<CompactDisc,String> cdcatCol= new TableColumn<>("Category Name");
+        cdcatCol.setMinWidth(200);
+        cdcatCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+        TableColumn<CompactDisc,Float> cdcostCol= new TableColumn<>("Cost");
+        cdcostCol.setMinWidth(100);
+        cdcostCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
+        TableColumn<CompactDisc,ArrayList<String>> cdartistCol= new TableColumn<>("ARTIST");
+        cdartistCol.setMinWidth(200);
+        cdartistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        //text field to insert data
+        cddirector =new TextField();cddirector.setMinWidth(200); cdlength=new TextField();cdlength.setMinWidth(100);
+        cdtitle=new TextField();cdtitle.setMinWidth(200);  cdcategory=new TextField();cdcategory.setMinWidth(200);
+        cdcost=new TextField();cdcost.setMinWidth(100); cdartist= new TextField(); cdartist.setMinWidth(200);
+        // cd table view
+        cdTable=new TableView<>();
+        cdTable.setItems(getCD());
+        cdTable.getColumns().addAll(cddirtCol,cdlenCol,cdttlCol,cdcatCol,cdcostCol,cdartistCol);
+
+        //table buttons,hbox        not used
+//        Button addBtn= new Button("ADD");
+//        addBtn.setOnAction(e -> addBtnClicked());
+//        Button delBtn= new Button("DELETE");
+//        delBtn.setOnAction(e -> delBtnClicked());
+        //diff table
+//        btnhb.getChildren().addAll(director,length,title,category,cost,addBtn,delBtn);
+//        adminbp.setBottom(tableVB);
+//        tableVB.getChildren().addAll(dvdTable,btnhb);
+
+        BorderPane adminbp= new BorderPane();
+        HBox adminhb = new HBox();
+        //scene for each table
+        //book scene
+        Button bookaddBtn= new Button("ADD");
+        bookaddBtn.setOnAction(e -> addBtnClicked());
+        Button bookdelBtn= new Button("DELETE");
+        bookdelBtn.setOnAction(e -> delBtnClicked());
+        HBox bookBtnHb= new HBox();
+        bookBtnHb.setPadding(new Insets(10,10,10,10));
+        bookBtnHb.setSpacing(10);
+        VBox bookTabVb = new VBox();
+        bookBtnHb.getChildren().addAll(btitle, bcategory, bcost,bauthors,bookaddBtn,bookdelBtn);
+        bookTabVb.getChildren().addAll(bookTable,bookBtnHb);
+        Scene bookScene= new Scene(bookTabVb);
+        //cd scene
+        Button cdaddBtn= new Button("ADD");
+        cdaddBtn.setOnAction(e -> addBtnClicked());
+        Button cddelBtn= new Button("DELETE");
+        cddelBtn.setOnAction(e -> delBtnClicked());
+        HBox cdBtnHb= new HBox();
+        cdBtnHb.setPadding(new Insets(10,10,10,10));
+        cdBtnHb.setSpacing(10);
+        VBox cdTabVb = new VBox();
+        cdBtnHb.getChildren().addAll(cddirector, cdlength, cdtitle, cdcategory, cdcost,cdartist,cdaddBtn,cddelBtn);
+        cdTabVb.getChildren().addAll(cdTable,cdBtnHb);
+        Scene cdScene= new Scene(cdTabVb);
+        //dvd scene
+        Button dvdaddBtn= new Button("ADD");
+        dvdaddBtn.setOnAction(e -> addBtnClicked());
+        Button dvddelBtn= new Button("DELETE");
+        dvddelBtn.setOnAction(e -> delBtnClicked());
+        HBox dvdBtnHb= new HBox();
+        dvdBtnHb.setPadding(new Insets(10,10,10,10));
+        dvdBtnHb.setSpacing(10);
+        VBox dvdTabVb = new VBox();
+        dvdBtnHb.getChildren().addAll(director, length, title, category, cost,dvdaddBtn,dvddelBtn);
+        dvdTabVb.getChildren().addAll(dvdTable,dvdBtnHb);
+        Scene dvdScene= new Scene(dvdTabVb);
+
+        //table select buttons
+        //book btn
+        Image bookBtnImg = new Image("D:\\code\\Java\\demo2\\images\\bookBtn.jpg");
+        ImageView bookBtnImgV = new ImageView(bookBtnImg);
+        bookBtnImgV.setFitHeight(200);
+        bookBtnImgV.setFitWidth(200);
+        Button bookTabBtn = new Button("manage book table",bookBtnImgV);
+        bookTabBtn.setMaxWidth(50);
+        bookTabBtn.setMaxHeight(50);
+//        bookTabBtn.setGraphic(bookBtnImgV);
+        bookTabBtn.setOnMouseClicked(e -> {
+            Stage bookTabStg = new Stage();
+            bookTabStg.setScene(bookScene);
+            bookTabStg.show();
+        });
+        //cd btn
+        Image cdBtnImg = new Image("D:\\code\\Java\\demo2\\images\\cdBtn.jpg");
+        ImageView cdBtnImgV = new ImageView(cdBtnImg);
+        cdBtnImgV.setFitHeight(200);
+        cdBtnImgV.setFitWidth(200);
+        Button cdTabBtn = new Button("manage CD table",cdBtnImgV);
+        cdTabBtn.setMaxWidth(50);
+        cdTabBtn.setMaxHeight(50);
+//        cdTabBtn.setGraphic(cdBtnImgV);
+        cdTabBtn.setOnMouseClicked(e -> {
+            Stage cdTabStg = new Stage();
+            cdTabStg.setScene(cdScene);
+            cdTabStg.show();
+        });
+        //dvd btn
+        Button dvdTabBtn = new Button("manage DVD table");
+        Image dvdBtnImg = new Image("D:\\code\\Java\\demo2\\images\\dvdBtn.png");
+        ImageView dvdBtnImgV = new ImageView(dvdBtnImg);
+        dvdTabBtn.setMaxWidth(50);
+        dvdTabBtn.setMaxHeight(50);
+        dvdTabBtn.setGraphic(dvdBtnImgV);
+        dvdBtnImgV.setFitHeight(200);
+        dvdBtnImgV.setFitWidth(200);
+        dvdTabBtn.setOnMouseClicked(e -> {
+            Stage dvdTabStg = new Stage();
+            dvdTabStg.setScene(dvdScene);
+            dvdTabStg.show();
+        });
+
+        //banner
+        VBox bannervb = new VBox();
+        Label adminSceneLabel = new Label("Order Management Application");
+        adminSceneLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #020122; -fx-background-color: #F4442E");
+        adminSceneLabel.setAlignment(Pos.CENTER);
+        adminSceneLabel.setPrefWidth(1000);
+        adminSceneLabel.setPrefHeight(60);
+
+        Label adminLabel = new Label("Admin Management");
+        adminLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #020122; -fx-background-color: #edd382");
+        adminLabel.setAlignment(Pos.CENTER);
+        adminLabel.setPrefWidth(1000);
+        adminLabel.setPrefHeight(60);
+
+        bannervb.getChildren().addAll(adminSceneLabel,adminLabel);
+        adminbp.setTop(bannervb);
+        adminhb.getChildren().addAll(bookTabBtn,cdTabBtn,dvdTabBtn);
+        adminhb.setAlignment(Pos.CENTER);
+        adminbp.setCenter(adminhb);
+        Scene adminScene= new Scene(adminbp,1000, 500);
+
+//////log in scene
         BorderPane logInPane = new BorderPane();
 //        Scene logInScene = new Scene(logInPane, 1000, 500);
 //        primaryStage.setScene(logInScene);
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        //行列之间的间隔
         grid.setHgap(10);
         grid.setVgap(10);
-        //面板边缘周围的间隔
         grid.setPadding(new Insets(25, 25, 25, 25));
-
+    //display welcome
         Text scenetitle = new Text("Welcome");
         scenetitle.setStyle("-fx-font: 50 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e");
         scenetitle.setLayoutX(150);
         scenetitle.setLayoutY(150);
         grid.add(scenetitle, 0, 0, 2, 1);
-
-        Label userName = new Label("User Name:");
+    //user name
+        Label userName = new Label("Your Name:");
         userName.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
         userName.setLayoutX(50);
         userName.setLayoutY(50);
@@ -191,7 +426,7 @@ public class Aims extends Application {
         TextField name = new TextField();
         name.setPromptText("Enter your name.");
         grid.add(name, 1, 1);
-
+    //pw
         Label pw = new Label("Password:");
         pw.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
         pw.setLayoutX(50);
@@ -201,6 +436,20 @@ public class Aims extends Application {
         PasswordField passwordField = new PasswordField();
         name.setPromptText("Enter your password.");
         grid.add(passwordField, 1, 2);
+    //choose roles
+        Label role = new Label("Role:");
+        role.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        role.setLayoutX(50);
+        role.setLayoutY(50);
+        grid.add(role, 0, 3);
+
+        ComboBox<String> cbox= new ComboBox<>();
+        cbox.getItems().addAll("User","Admin");
+        cbox.setPromptText("What's your role?");
+        grid.add(cbox,1,3);
+//        cbox.setOnAction(e -> {
+//            if((cbox.getValue()).equals("User"))
+//        });
 
         Button btn = new Button("Sign in");
         btn.setMaxWidth(120);
@@ -208,19 +457,19 @@ public class Aims extends Application {
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
+        grid.add(hbBtn, 1, 5);
 
         final Text text = new Text();
         grid.add(text, 0, 6);
         GridPane.setColumnSpan(text, 2);
         GridPane.setHalignment(text, RIGHT);
-
+    //banner
         Label titleLabel2 = new Label("Order Management Application");
         titleLabel2.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e; -fx-background-color: #edd382");
         titleLabel2.setAlignment(Pos.CENTER);
         titleLabel2.setPrefWidth(1000);
         titleLabel2.setPrefHeight(60);
-
+    //bakcground img
         Image image = new Image("D:\\code\\Java\\demo2\\images\\bookstore2.jpg");
         ImageView imageView = new ImageView(image);
         //Setting the position of the image
@@ -254,11 +503,13 @@ public class Aims extends Application {
                             "Please enter your password. ");
                     return;
                 }
-                primaryStage.setScene(primaryScene);
+                if((cbox.getValue()).equals("Admin")) primaryStage.setScene(adminScene);
+                else  primaryStage.setScene(primaryScene);
+
             }
         });
 
-        //scene after log in
+//////user scene
         BorderPane primaryPane = new BorderPane();
         ///////////////////// Khoi tao tieu de
         Label titleLabel = new Label("Order Management Application");
@@ -1023,6 +1274,12 @@ public class Aims extends Application {
         primaryStage.setResizable(false);
     }
 
+    public void addBtnClicked(){
+
+    }
+    public void delBtnClicked(){
+
+    }
     private static void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
