@@ -92,8 +92,10 @@ public class Book extends Media{
     /**
      * @param authors
      */
-    public void setAuthors(ArrayList<String> authors) {
-        this.authors = authors;
+    public void setAuthors(String authors) {
+        ArrayList<String> authorsalst= new ArrayList<>();
+        authorsalst.add(authors);
+        this.authors = authorsalst;
     }
 
     /**

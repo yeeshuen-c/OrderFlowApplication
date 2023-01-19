@@ -63,7 +63,7 @@ public class Order {
 //                    + med.getCategory() + ", "
 //                    + med.getCost() + ") has been added");
 
-            temp=med.getTitle()+", "+med.getCategory()+", "+med.getCost()+") \n";
+            temp=med.getTitle()+", "+med.getCategory()+", "+med.getCost()+" \n";
 //            order +=temp;
 
 //            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
