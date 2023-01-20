@@ -230,13 +230,13 @@ public class Aims extends Application {
         grid.setPadding(new Insets(25, 25, 25, 25));
     //display welcome
         Text scenetitle = new Text("Welcome");
-        scenetitle.setStyle("-fx-font: 50 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        scenetitle.setStyle("-fx-font: 50 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #EDD382;");
         scenetitle.setLayoutX(150);
         scenetitle.setLayoutY(150);
         grid.add(scenetitle, 0, 0, 2, 1);
     //user name
         Label userName = new Label("Your Name:");
-        userName.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        userName.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
         userName.setLayoutX(50);
         userName.setLayoutY(50);
         grid.add(userName, 0, 1);
@@ -246,7 +246,7 @@ public class Aims extends Application {
         grid.add(name, 1, 1);
     //pw
         Label pw = new Label("Password:");
-        pw.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        pw.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
         pw.setLayoutX(50);
         pw.setLayoutY(50);
         grid.add(pw, 0, 2);
@@ -256,7 +256,7 @@ public class Aims extends Application {
         grid.add(passwordField, 1, 2);
     //choose roles
         Label role = new Label("Role:");
-        role.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #f2f3ae");
+        role.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
         role.setLayoutX(50);
         role.setLayoutY(50);
         grid.add(role, 0, 3);
@@ -283,12 +283,12 @@ public class Aims extends Application {
         GridPane.setHalignment(text, RIGHT);
     //banner
         Label titleLabel2 = new Label("Order Management Application");
-        titleLabel2.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e; -fx-background-color: #edd382");
+        titleLabel2.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #780000; -fx-background-color: #669BBC");
         titleLabel2.setAlignment(Pos.CENTER);
         titleLabel2.setPrefWidth(1000);
         titleLabel2.setPrefHeight(60);
     //bakcground img
-        Image image = new Image("D:\\code\\Java\\demo2\\images\\bookstore2.jpg");
+        Image image = new Image("D:\\code\\Java\\demo2\\images\\bookstore3.jpg");
         ImageView imageView = new ImageView(image);
         //Setting the position of the image
         imageView.setX(50);
@@ -518,24 +518,31 @@ public class Aims extends Application {
         //banner
         VBox bannervb = new VBox();
         Label adminSceneLabel = new Label("Order Management Application");
-        adminSceneLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #020122; -fx-background-color: #F4442E");
+        adminSceneLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F; -fx-background-color: #669BBC");
         adminSceneLabel.setAlignment(Pos.CENTER);
         adminSceneLabel.setPrefWidth(1000);
         adminSceneLabel.setPrefHeight(60);
 
-        Label adminLabel = new Label("Admin Management");
-        adminLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #020122; -fx-background-color: #edd382");
+        Label adminTitleLabel = new Label("Admin Management");
+        adminTitleLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #FDF0D5; -fx-background-color: #780000");
+        adminTitleLabel.setAlignment(Pos.CENTER);
+        adminTitleLabel.setPrefWidth(1000);
+        adminTitleLabel.setPrefHeight(60);
+
+        Label adminLabel = new Label("Click on the button below to manage different tables.");
+        adminLabel.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #780000;");
         adminLabel.setAlignment(Pos.CENTER);
         adminLabel.setPrefWidth(1000);
-        adminLabel.setPrefHeight(60);
+        adminLabel.setPrefHeight(40);
 
-        bannervb.getChildren().addAll(adminSceneLabel,adminLabel);
+        bannervb.getChildren().addAll(adminSceneLabel,adminTitleLabel,adminLabel);
         adminhb.getChildren().addAll(bookTabBtn,cdTabBtn,dvdTabBtn);
         adminhb.setAlignment(Pos.CENTER);
         adminbp.setTop(bannervb);
         adminbp.setPadding(new Insets(10));
         adminbp.setCenter(adminhb);
         adminbp.setBottom(bckBtn);
+        adminbp.setStyle("-fx-background-color:#FDF0D5; -fx-border-width: 5; ");
         adminScene= new Scene(adminbp,1000, 500);
 
 //////user scene
@@ -1023,7 +1030,7 @@ public class Aims extends Application {
                                             vb.getChildren().add(orderTitle);
 
                                             for (int i = 0; i < anOrder.itemsOrdered.size(); i++) {
-                                                order=myOrder.addMedia(anOrder.itemsOrdered.get(i));
+                                                order=(i+1)+". "+myOrder.addMedia(anOrder.itemsOrdered.get(i));
                                                 Label orderLabel = new Label(order);
                                                 orderLabel.setStyle("-fx-font: 15 System; -fx-text-fill: #020122");
                                                 orderLabel.setAlignment(Pos.BOTTOM_CENTER);
@@ -1271,13 +1278,13 @@ public class Aims extends Application {
         BorderPane exitbp= new BorderPane();
         VBox exitvb = new VBox();
         Label titleLabel3 = new Label("Order Management Application");
-        titleLabel3.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #f4442e; -fx-background-color: #edd382");
+        titleLabel3.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #780000; -fx-background-color: #669BBC");
         titleLabel3.setAlignment(Pos.CENTER);
         titleLabel3.setPrefWidth(1000);
         titleLabel3.setPrefHeight(60);
 
         Label tqLabel = new Label("Thank You for Shopping With Us");
-        tqLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #020122; -fx-background-color: #edd382");
+        tqLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #003049; ");
         tqLabel.setAlignment(Pos.CENTER);
         tqLabel.setPrefWidth(1000);
         tqLabel.setPrefHeight(60);
@@ -1293,14 +1300,15 @@ public class Aims extends Application {
         payImageView.setFitWidth(1000);
 
         //review text box
-        Label reviewTtl= new Label("Feel free to leave your review for improvement");
-        reviewTtl.setStyle("-fx-font-size: 30 System; -fx-font-family:serif; -fx-text-fill: #edd382;");
+        Label reviewTtl= new Label("--Feel free to leave your review for improvement--\nBy clicking on 'submit' you will leave this page.");
+        reviewTtl.setStyle("-fx-font-size: 28 System; -fx-font-weight: Bold; -fx-font-family:Lucida Calligraphy; -fx-text-fill: #C1121F;");
         TextField review= new TextField();
         review.setMaxWidth(350);
         review.setMinHeight(100);
         Label reviewLbl= new Label();
-        reviewLbl.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold;");
+        reviewLbl.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #669BBC;");
         Button reviewSub= new Button("Submit");
+        reviewSub.setOnMouseClicked(e -> primaryStage.close());
         VBox reviewvb= new VBox(10,reviewTtl,review,reviewLbl,reviewSub);
         reviewvb.setAlignment(Pos.CENTER);
         reviewLbl.textProperty().bind(review.textProperty());
