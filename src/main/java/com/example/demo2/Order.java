@@ -12,6 +12,8 @@ public class Order {
     public static final int MAX_NUMBERS_ORDERED = 10;
     public ArrayList<Media> itemsOrdered = new ArrayList<Media>();
 
+    public int orderTabId;
+    public String orderTabDetails;
     /**
      *
      */
@@ -23,6 +25,14 @@ public class Order {
         }
     }
 
+    public Order(int i, String details){
+        this.orderTabId=i+1;
+        this.orderTabDetails=details;
+    }
+
+    public int getOrderTabId(){ return orderTabId;}
+
+    public String getOrderTabDetails(){ return orderTabDetails;}
     /**
      * @return the dateOrdered
      */

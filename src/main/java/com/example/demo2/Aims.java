@@ -49,6 +49,7 @@ public class Aims extends Application {
     TableView<DigitalVideoDisc> dvdTable;
     TableView<Book> bookTable;
     TableView<CompactDisc> cdTable;
+    TableView<Order> orderTable;
     TextField director, length, title, category, cost;
     TextField btitle, bcategory, bcost, bauthors;
     TextField cddirector, cdlength, cdtitle, cdcategory, cdcost,cdartist;
@@ -236,7 +237,7 @@ public class Aims extends Application {
         grid.add(scenetitle, 0, 0, 2, 1);
     //user name
         Label userName = new Label("Your Name:");
-        userName.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+        userName.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #3772FF");
         userName.setLayoutX(50);
         userName.setLayoutY(50);
         grid.add(userName, 0, 1);
@@ -246,7 +247,7 @@ public class Aims extends Application {
         grid.add(name, 1, 1);
     //pw
         Label pw = new Label("Password:");
-        pw.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+        pw.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #3772FF");
         pw.setLayoutX(50);
         pw.setLayoutY(50);
         grid.add(pw, 0, 2);
@@ -256,7 +257,7 @@ public class Aims extends Application {
         grid.add(passwordField, 1, 2);
     //choose roles
         Label role = new Label("Role:");
-        role.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+        role.setStyle("-fx-font: 45 System; -fx-font-weight: Bold; -fx-text-fill: #3772FF");
         role.setLayoutX(50);
         role.setLayoutY(50);
         grid.add(role, 0, 3);
@@ -283,7 +284,7 @@ public class Aims extends Application {
         GridPane.setHalignment(text, RIGHT);
     //banner
         Label titleLabel2 = new Label("Order Management Application");
-        titleLabel2.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #780000; -fx-background-color: #669BBC");
+        titleLabel2.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #DF2935; -fx-background-color: #FDCA40");
         titleLabel2.setAlignment(Pos.CENTER);
         titleLabel2.setPrefWidth(1000);
         titleLabel2.setPrefHeight(60);
@@ -416,6 +417,18 @@ public class Aims extends Application {
             cdChoose.add(1);
         }
 
+        //order table
+        TableColumn<Order,Integer> indexCol = new TableColumn<>("Bil");
+        indexCol.setMinWidth(200);
+        indexCol.setCellValueFactory(new PropertyValueFactory<>("orderTabId"));
+        TableColumn<Order,String> detailCol = new TableColumn<>("Order Details");
+        detailCol.setMinWidth(200);
+        detailCol.setCellValueFactory(new PropertyValueFactory<>("orderTabDetails"));
+        orderTable=new TableView<>();
+        orderTable.setItems(getOrder());
+        orderTable.getColumns().addAll(indexCol,detailCol);
+        orderTable.setMaxHeight(300);
+
         //table buttons,hbox        not used
 //        Button addBtn= new Button("ADD");
 //        addBtn.setOnAction(e -> addBtnClicked());
@@ -515,41 +528,72 @@ public class Aims extends Application {
         bckBtn.setMaxWidth(170);
         bckBtn.setOnMouseClicked(e -> { primaryStage.setScene(logInScene); });
 
+        //test
+        Scene orderScene= new Scene(orderTable);
+        HBox orderhb= new HBox(orderTable);
+//        Button testorder=new Button("order");
+//        testorder.setOnMouseClicked(e -> { Stage orderstg = new Stage();
+//            orderstg.setScene(orderScene);
+//            orderstg.show(); });
+
         //banner
         VBox bannervb = new VBox();
         Label adminSceneLabel = new Label("Order Management Application");
-        adminSceneLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F; -fx-background-color: #669BBC");
+        adminSceneLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #080708; -fx-background-color: #DF2935");
         adminSceneLabel.setAlignment(Pos.CENTER);
         adminSceneLabel.setPrefWidth(1000);
         adminSceneLabel.setPrefHeight(60);
 
         Label adminTitleLabel = new Label("Admin Management");
-        adminTitleLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #FDF0D5; -fx-background-color: #780000");
+        adminTitleLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #E6E8E6; -fx-background-color: #FDCA40");
         adminTitleLabel.setAlignment(Pos.CENTER);
         adminTitleLabel.setPrefWidth(1000);
         adminTitleLabel.setPrefHeight(60);
 
         Label adminLabel = new Label("Click on the button below to manage different tables.");
-        adminLabel.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #780000;");
+        adminLabel.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #DF2935;");
         adminLabel.setAlignment(Pos.CENTER);
         adminLabel.setPrefWidth(1000);
         adminLabel.setPrefHeight(40);
 
-        bannervb.getChildren().addAll(adminSceneLabel,adminTitleLabel,adminLabel);
+        //content pane for switch
+        Pane adminConPane= new Pane();
+        adminConPane.getChildren().add(adminhb);
+
+        //menu
+        Menu tablesMenu= new Menu("Tables");
+        MenuItem tablemi = new MenuItem("tables...");
+        tablemi.setOnAction(e -> {
+            adminConPane.getChildren().remove(orderhb);
+            adminConPane.getChildren().add(adminhb);
+        });
+        tablesMenu.getItems().add(tablemi);
+        Menu orderMenu= new Menu("Order(s)");
+        MenuItem ordermi= new MenuItem("orders...");
+        ordermi.setOnAction(e -> {
+            adminConPane.getChildren().remove(adminhb);
+            adminConPane.getChildren().add(orderhb);
+        });
+        orderMenu.getItems().add(ordermi);
+        MenuBar menuBar= new MenuBar();
+        menuBar.getMenus().addAll(tablesMenu,orderMenu);
+
+        bannervb.getChildren().addAll(adminSceneLabel,adminTitleLabel,menuBar);
         adminhb.getChildren().addAll(bookTabBtn,cdTabBtn,dvdTabBtn);
         adminhb.setAlignment(Pos.CENTER);
         adminbp.setTop(bannervb);
         adminbp.setPadding(new Insets(10));
-        adminbp.setCenter(adminhb);
+
+        adminbp.setCenter(adminConPane);
         adminbp.setBottom(bckBtn);
-        adminbp.setStyle("-fx-background-color:#FDF0D5; -fx-border-width: 5; ");
+        adminbp.setStyle("-fx-background-color:#E6E8E6; -fx-border-width: 5; ");
         adminScene= new Scene(adminbp,1000, 500);
 
 //////user scene
         BorderPane primaryPane = new BorderPane();
         ///////////////////// Khoi tao tieu de
         Label titleLabel = new Label("Order Management Application");
-        titleLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #c0392b; -fx-background-color: #ecf0f1");
+        titleLabel.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #3772FF; -fx-background-color: #FDCA40");
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setPrefWidth(1000);
         titleLabel.setPrefHeight(60);
@@ -571,30 +615,30 @@ public class Aims extends Application {
         menuLabel.setAlignment(Pos.CENTER);
 
         Label createLabel = new Label("  Create new Order");
-        createLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #2ecc71; -fx-border-color: #2ecc71; -fx-border-width: 5");
+        createLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #DF2935; -fx-border-color: #2ecc71; -fx-border-width: 5");
         createLabel.setPrefSize(259, 62);
 
         Label addLabel = new Label("  Add item to the order");
-        addLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #2ecc71; -fx-border-color: #2ecc71; -fx-border-width: 5");
+        addLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #DF2935; -fx-border-color: #2ecc71; -fx-border-width: 5");
         addLabel.setPrefSize(259, 62);
 
         Label deleteLabel = new Label("  Delete item by id");
-        deleteLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #2ecc71; -fx-border-color: #2ecc71; -fx-border-width: 5");
+        deleteLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #DF2935; -fx-border-color: #2ecc71; -fx-border-width: 5");
         deleteLabel.setPrefSize(259, 62);
 
         Label displayLabel = new Label("  Display the items list of order");
-        displayLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #2ecc71; -fx-border-color: #2ecc71; -fx-border-width: 5");
+        displayLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #DF2935; -fx-border-color: #2ecc71; -fx-border-width: 5");
         displayLabel.setPrefSize(259, 62);
 
-        Label exitLabel = new Label("  Exit to pay");
-        exitLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #2ecc71; -fx-border-color: #2ecc71; -fx-border-width: 5");
+        Label exitLabel = new Label("  Exit to review");
+        exitLabel.setStyle("-fx-font-size: 15 System; -fx-text-fill: #DF2935; -fx-border-color: #2ecc71; -fx-border-width: 5");
         exitLabel.setPrefSize(259, 76);
 
         menuBox.getChildren().addAll(menuLabel,createLabel,addLabel, deleteLabel, displayLabel, exitLabel);
 
         Pane contentPane = new Pane();
         contentPane.setPrefSize(760, 420);
-        contentPane.setStyle("-fx-background-color: #7f8c8d");
+        contentPane.setStyle("-fx-background-color: #E6E8E6");
         primaryPane.setCenter(contentPane);
 
         ////////////////////// lock stage after paid
@@ -1278,13 +1322,13 @@ public class Aims extends Application {
         BorderPane exitbp= new BorderPane();
         VBox exitvb = new VBox();
         Label titleLabel3 = new Label("Order Management Application");
-        titleLabel3.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #780000; -fx-background-color: #669BBC");
+        titleLabel3.setStyle("-fx-font-size: 34 System; -fx-font-weight: Bold; -fx-text-fill: #DF2935; -fx-background-color: #FDCA40");
         titleLabel3.setAlignment(Pos.CENTER);
         titleLabel3.setPrefWidth(1000);
         titleLabel3.setPrefHeight(60);
 
         Label tqLabel = new Label("Thank You for Shopping With Us");
-        tqLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #003049; ");
+        tqLabel.setStyle("-fx-font-size: 28 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #DF2935; ");
         tqLabel.setAlignment(Pos.CENTER);
         tqLabel.setPrefWidth(1000);
         tqLabel.setPrefHeight(60);
@@ -1301,14 +1345,21 @@ public class Aims extends Application {
 
         //review text box
         Label reviewTtl= new Label("--Feel free to leave your review for improvement--\nBy clicking on 'submit' you will leave this page.");
-        reviewTtl.setStyle("-fx-font-size: 28 System; -fx-font-weight: Bold; -fx-font-family:Lucida Calligraphy; -fx-text-fill: #C1121F;");
+        reviewTtl.setStyle("-fx-font-size: 28 System; -fx-font-weight: Bold; -fx-font-family:Lucida Calligraphy; -fx-text-fill: #3772FF;");
         TextField review= new TextField();
         review.setMaxWidth(350);
         review.setMinHeight(100);
         Label reviewLbl= new Label();
-        reviewLbl.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #669BBC;");
-        Button reviewSub= new Button("Submit");
+        reviewLbl.setStyle("-fx-font-size: 20 System; -fx-font-family:serif; -fx-font-weight: Bold; -fx-text-fill: #3772FF;");
+        //buttons
+        Button reviewSub= new Button("Submit/Exit");
         reviewSub.setOnMouseClicked(e -> primaryStage.close());
+//        Button backlogin=new Button("Back to login page");
+//        backlogin.setOnMouseClicked(e -> {
+//            primaryStage.setScene(logInScene);
+//            getOrder();
+//        });
+//        backlogin.setMaxWidth(100);
         VBox reviewvb= new VBox(10,reviewTtl,review,reviewLbl,reviewSub);
         reviewvb.setAlignment(Pos.CENTER);
         reviewLbl.textProperty().bind(review.textProperty());
@@ -1390,6 +1441,44 @@ public class Aims extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.show();
+    }
+
+    public ObservableList<Order> getOrder(){
+        ObservableList<Order> order= FXCollections.observableArrayList();
+
+//        ArrayList<TextArea> mediaInfo = new ArrayList<>();
+        String mediaInfo="";
+        if (myOrder.itemsOrdered.size() > 0) {
+            for (int i = 0; i < myOrder.itemsOrdered.size(); i++) {
+                if (myOrder.itemsOrdered.get(i) instanceof CompactDisc) {
+                    mediaInfo="Director: " + ((CompactDisc) myOrder.itemsOrdered.get(i)).getDirector() + "\n"
+                            + "Artist: " + ((CompactDisc) myOrder.itemsOrdered.get(i)).getArtist() + "\n"
+                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
+                            + "Length: " + ((Disc) myOrder.itemsOrdered.get(i)).getLength() + "\n"
+                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
+                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
+//                int finalI = i;
+                }
+                if (myOrder.itemsOrdered.get(i) instanceof DigitalVideoDisc) {
+                    mediaInfo="Director: " + ((Disc) myOrder.itemsOrdered.get(i)).getDirector() + "\n"
+                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
+                            + "Length: " + ((Disc) myOrder.itemsOrdered.get(i)).getLength() + "\n"
+                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
+                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
+                    int finalI = i;
+                }
+                if (myOrder.itemsOrdered.get(i) instanceof Book) {
+                    mediaInfo="Authors: " + ((Book) myOrder.itemsOrdered.get(i)).getAuthors() + "\n"
+                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
+                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
+                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
+                }
+                order.add(new Order(i,mediaInfo));
+            }
+        }
+        else{order.add(new Order(0,mediaInfo));}
+
+        return order;
     }
 }
 
