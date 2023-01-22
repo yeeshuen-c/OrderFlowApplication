@@ -10,4 +10,4 @@ A simple GUI application for bookstore management, developed using Java and Java
 * Simple order placing with the help of user-friendly UI.
 * Manage orders option for admin.
 
-
+![](images/flowchart.png)
