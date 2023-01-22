@@ -253,7 +253,7 @@ public class Aims extends Application {
         grid.add(pw, 0, 2);
 
         PasswordField passwordField = new PasswordField();
-        name.setPromptText("Enter your password.");
+        passwordField.setPromptText("Enter your password.");
         grid.add(passwordField, 1, 2);
     //choose roles
         Label role = new Label("Role:");
@@ -651,7 +651,7 @@ public class Aims extends Application {
 
         ///////////////////////   Main scene
         Label primaryLabel = new Label("Welcome to our store");
-        primaryLabel.setStyle("-fx-font: 40 System; -fx-font-weight: Bold; -fx-text-fill: #ecf0f1");
+        primaryLabel.setStyle("-fx-font: 40 System; -fx-font-weight: Bold; -fx-text-fill: #780000");
         primaryLabel.setLayoutX(150);
         primaryLabel.setLayoutY(150);
         contentPane.getChildren().add(primaryLabel);
@@ -682,7 +682,7 @@ public class Aims extends Application {
                 pay = 0;
 
                 Label newOrderLabel = new Label("New Order was created !");
-                newOrderLabel.setStyle("-fx-font: 30 System; -fx-font-weight: Bold; -fx-text-fill: #ecf0f1");
+                newOrderLabel.setStyle("-fx-font: 30 System; -fx-font-weight: Bold; -fx-text-fill: #780000");
                 newOrderLabel.setLayoutX(200);
                 newOrderLabel.setLayoutY(180);
                 contentPane.getChildren().add(newOrderLabel);
