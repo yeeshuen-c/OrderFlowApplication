@@ -71,6 +71,7 @@ public class Aims extends Application {
     ObservableList<DigitalVideoDisc> dvds;
     ObservableList<Book> books;
     ObservableList<CompactDisc> cds;
+    ObservableList<Order> order;
 
 
     public static void main(String[] args) {
@@ -437,10 +438,10 @@ public class Aims extends Application {
 
         //order table
         TableColumn<Order,Integer> indexCol = new TableColumn<>("Bil");
-        indexCol.setMinWidth(200);
+        indexCol.setMinWidth(70);
         indexCol.setCellValueFactory(new PropertyValueFactory<>("orderTabId"));
         TableColumn<Order,String> detailCol = new TableColumn<>("Order Details");
-        detailCol.setMinWidth(200);
+        detailCol.setMinWidth(400);
         detailCol.setCellValueFactory(new PropertyValueFactory<>("orderTabDetails"));
         orderTable=new TableView<>();
         orderTable.setItems(getOrder());
@@ -468,29 +469,29 @@ public class Aims extends Application {
         HBox bookBtnHb= new HBox();
         bookBtnHb.setPadding(new Insets(10,10,10,10));
         bookBtnHb.setSpacing(10);
-        //search bar
-        HBox booksearchHb= new HBox();
-        Label booksearchLabel = new Label("key in item to search(analysis,lecture):");
-        booksearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
-        TextField bookSearchText = new TextField();
-        booksearchHb.getChildren().addAll(booksearchLabel,bookSearchText);
-        FilteredList<Book>bookFilter= new FilteredList<>(books,b->true);
-        bookSearchText.textProperty().addListener((observable,oldValue,newValue)->{
-            bookFilter.setPredicate(bookobj->{
-                if(newValue==null||newValue.isEmpty()) return true;
-                String lowerCase=newValue.toLowerCase();
-                if(bookobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else if(bookobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
-//                else if(bookobj.getAuthors().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else return false;
-            });
-        });
-        SortedList<Book> booksorted= new SortedList<>(bookFilter);
-        booksorted.comparatorProperty().bind(bookTable.comparatorProperty());
-        bookTable.setItems(booksorted);
+//        //search bar
+//        HBox booksearchHb= new HBox();
+//        Label booksearchLabel = new Label("key in item to search(analysis,lecture):");
+//        booksearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+//        TextField bookSearchText = new TextField();
+//        booksearchHb.getChildren().addAll(booksearchLabel,bookSearchText);
+//        FilteredList<Book>bookFilter= new FilteredList<>(books,b->true);
+//        bookSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+//            bookFilter.setPredicate(bookobj->{
+//                if(newValue==null||newValue.isEmpty()) return true;
+//                String lowerCase=newValue.toLowerCase();
+//                if(bookobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(bookobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
+////                else if(bookobj.getAuthors().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else return false;
+//            });
+//        });
+//        SortedList<Book> booksorted= new SortedList<>(bookFilter);
+//        booksorted.comparatorProperty().bind(bookTable.comparatorProperty());
+//        bookTable.setItems(booksorted);
         VBox bookTabVb = new VBox();
         bookBtnHb.getChildren().addAll(btitle, bcategory, bcost,bauthors,bookaddBtn,bookdelBtn);
-        bookTabVb.getChildren().addAll(booksearchHb,bookTable,bookBtnHb);
+        bookTabVb.getChildren().addAll(bookTable,bookBtnHb);
         Scene bookScene= new Scene(bookTabVb);
 
         //cd scene
@@ -501,30 +502,30 @@ public class Aims extends Application {
         HBox cdBtnHb= new HBox();
         cdBtnHb.setPadding(new Insets(10,10,10,10));
         cdBtnHb.setSpacing(10);
-        //search bar
-        HBox cdsearchHb= new HBox();
-        Label cdsearchLabel = new Label("key in item to search(director,title,category,artist):");
-        cdsearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
-        TextField cdSearchText = new TextField();
-        cdsearchHb.getChildren().addAll(cdsearchLabel,cdSearchText);
-        FilteredList<CompactDisc>cdFilter= new FilteredList<>(cds,b->true);
-        cdSearchText.textProperty().addListener((observable,oldValue,newValue)->{
-            cdFilter.setPredicate(cdobj->{
-                if(newValue==null||newValue.isEmpty()) return true;
-                String lowerCase=newValue.toLowerCase();
-                if(cdobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else if(cdobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else if(cdobj.getDirector().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else if(cdobj.getArtist().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else return false;
-            });
-        });
-        SortedList<CompactDisc> cdsorted= new SortedList<>(cdFilter);
-        cdsorted.comparatorProperty().bind(cdTable.comparatorProperty());
-        cdTable.setItems(cdsorted);
+//        //search bar
+//        HBox cdsearchHb= new HBox();
+//        Label cdsearchLabel = new Label("key in item to search(director,title,category,artist):");
+//        cdsearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+//        TextField cdSearchText = new TextField();
+//        cdsearchHb.getChildren().addAll(cdsearchLabel,cdSearchText);
+//        FilteredList<CompactDisc>cdFilter= new FilteredList<>(cds,b->true);
+//        cdSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+//            cdFilter.setPredicate(cdobj->{
+//                if(newValue==null||newValue.isEmpty()) return true;
+//                String lowerCase=newValue.toLowerCase();
+//                if(cdobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(cdobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(cdobj.getDirector().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(cdobj.getArtist().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else return false;
+//            });
+//        });
+//        SortedList<CompactDisc> cdsorted= new SortedList<>(cdFilter);
+//        cdsorted.comparatorProperty().bind(cdTable.comparatorProperty());
+//        cdTable.setItems(cdsorted);
         VBox cdTabVb = new VBox();
         cdBtnHb.getChildren().addAll(cddirector, cdlength, cdtitle, cdcategory, cdcost,cdartist,cdaddBtn,cddelBtn);
-        cdTabVb.getChildren().addAll(cdsearchHb,cdTable,cdBtnHb);
+        cdTabVb.getChildren().addAll(cdTable,cdBtnHb);
         Scene cdScene= new Scene(cdTabVb);
 
         //dvd scene
@@ -535,30 +536,30 @@ public class Aims extends Application {
         HBox dvdBtnHb= new HBox();
         dvdBtnHb.setPadding(new Insets(10,10,10,10));
         dvdBtnHb.setSpacing(10);
-        //search bar
-        HBox dvdsearchHb= new HBox();
-        Label dvdsearchLabel = new Label("key in item to search(director,title,category):");
-        dvdsearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
-        TextField dvdSearchText = new TextField();
-        dvdsearchHb.getChildren().addAll(dvdsearchLabel,dvdSearchText);
-        FilteredList<DigitalVideoDisc>dvdFilter= new FilteredList<>(dvds,b->true);
-        dvdSearchText.textProperty().addListener((observable,oldValue,newValue)->{
-            dvdFilter.setPredicate(dvdobj->{
-                if(newValue==null||newValue.isEmpty()) return true;
-                String lowerCase=newValue.toLowerCase();
-                if(dvdobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else if(dvdobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else if(dvdobj.getDirector().toLowerCase().indexOf(lowerCase) != -1) return true;
-                else return false;
-            });
-        });
-        SortedList<DigitalVideoDisc> sorted= new SortedList<>(dvdFilter);
-        sorted.comparatorProperty().bind(dvdTable.comparatorProperty());
-        dvdTable.setItems(sorted);
+//        //search bar
+//        HBox dvdsearchHb= new HBox();
+//        Label dvdsearchLabel = new Label("key in item to search(director,title,category):");
+//        dvdsearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+//        TextField dvdSearchText = new TextField();
+//        dvdsearchHb.getChildren().addAll(dvdsearchLabel,dvdSearchText);
+//        FilteredList<DigitalVideoDisc>dvdFilter= new FilteredList<>(dvds,b->true);
+//        dvdSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+//            dvdFilter.setPredicate(dvdobj->{
+//                if(newValue==null||newValue.isEmpty()) return true;
+//                String lowerCase=newValue.toLowerCase();
+//                if(dvdobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(dvdobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(dvdobj.getDirector().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else return false;
+//            });
+//        });
+//        SortedList<DigitalVideoDisc> sorted= new SortedList<>(dvdFilter);
+//        sorted.comparatorProperty().bind(dvdTable.comparatorProperty());
+//        dvdTable.setItems(sorted);
 
         VBox dvdTabVb = new VBox();
         dvdBtnHb.getChildren().addAll(director, length, title, category, cost,dvdaddBtn,dvddelBtn);
-        dvdTabVb.getChildren().addAll(dvdsearchHb,dvdTable,dvdBtnHb);
+        dvdTabVb.getChildren().addAll(dvdTable,dvdBtnHb);
         Scene dvdScene= new Scene(dvdTabVb);
 
         //table select buttons
@@ -621,7 +622,27 @@ public class Aims extends Application {
 
         //test
         Scene orderScene= new Scene(orderTable);
-        HBox orderhb= new HBox(orderTable);
+        //search bar
+        HBox ordersearchHb= new HBox();
+        Label ordersearchLabel = new Label("key in item to search:");
+        ordersearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #669BBC");
+        TextField orderSearchText = new TextField();
+        ordersearchHb.getChildren().addAll(ordersearchLabel,orderSearchText);
+        FilteredList<Order>orderFilter= new FilteredList<>(order,b->true);
+        orderSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+            orderFilter.setPredicate(orderobj->{
+                if(newValue==null||newValue.isEmpty()) return true;
+                String lowerCase=newValue.toLowerCase();
+//                if(orderobj.getOrderTabId().toLowerCase().indexOf(lowerCase) != -1) return true;
+                if(orderobj.getOrderTabDetails().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(bookobj.getAuthors().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else return false;
+            });
+        });
+        SortedList<Order> ordersorted= new SortedList<>(orderFilter);
+        ordersorted.comparatorProperty().bind(orderTable.comparatorProperty());
+        orderTable.setItems(ordersorted);
+        HBox orderhb= new HBox(ordersearchHb,orderTable);
 //        Button testorder=new Button("order");
 //        testorder.setOnMouseClicked(e -> { Stage orderstg = new Stage();
 //            orderstg.setScene(orderScene);
@@ -1541,39 +1562,44 @@ public class Aims extends Application {
     }
 
     public ObservableList<Order> getOrder(){
-        ObservableList<Order> order= FXCollections.observableArrayList();
+        order= FXCollections.observableArrayList();
 
-//        ArrayList<TextArea> mediaInfo = new ArrayList<>();
-        String mediaInfo="";
-        if (myOrder.itemsOrdered.size() > 0) {
-            for (int i = 0; i < myOrder.itemsOrdered.size(); i++) {
-                if (myOrder.itemsOrdered.get(i) instanceof CompactDisc) {
-                    mediaInfo="Director: " + ((CompactDisc) myOrder.itemsOrdered.get(i)).getDirector() + "\n"
-                            + "Artist: " + ((CompactDisc) myOrder.itemsOrdered.get(i)).getArtist() + "\n"
-                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
-                            + "Length: " + ((Disc) myOrder.itemsOrdered.get(i)).getLength() + "\n"
-                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
-                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
-//                int finalI = i;
-                }
-                if (myOrder.itemsOrdered.get(i) instanceof DigitalVideoDisc) {
-                    mediaInfo="Director: " + ((Disc) myOrder.itemsOrdered.get(i)).getDirector() + "\n"
-                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
-                            + "Length: " + ((Disc) myOrder.itemsOrdered.get(i)).getLength() + "\n"
-                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
-                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
-                    int finalI = i;
-                }
-                if (myOrder.itemsOrdered.get(i) instanceof Book) {
-                    mediaInfo="Authors: " + ((Book) myOrder.itemsOrdered.get(i)).getAuthors() + "\n"
-                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
-                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
-                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
-                }
-                order.add(new Order(i,mediaInfo));
-            }
-        }
-        else{order.add(new Order(0,mediaInfo));}
+////        ArrayList<TextArea> mediaInfo = new ArrayList<>();
+//        String mediaInfo="";
+//        if (myOrder.itemsOrdered.size() > 0) {
+//            for (int i = 0; i < myOrder.itemsOrdered.size(); i++) {
+//                if (myOrder.itemsOrdered.get(i) instanceof CompactDisc) {
+//                    mediaInfo="Director: " + ((CompactDisc) myOrder.itemsOrdered.get(i)).getDirector() + "\n"
+//                            + "Artist: " + ((CompactDisc) myOrder.itemsOrdered.get(i)).getArtist() + "\n"
+//                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
+//                            + "Length: " + ((Disc) myOrder.itemsOrdered.get(i)).getLength() + "\n"
+//                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
+//                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
+////                int finalI = i;
+//                }
+//                if (myOrder.itemsOrdered.get(i) instanceof DigitalVideoDisc) {
+//                    mediaInfo="Director: " + ((Disc) myOrder.itemsOrdered.get(i)).getDirector() + "\n"
+//                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
+//                            + "Length: " + ((Disc) myOrder.itemsOrdered.get(i)).getLength() + "\n"
+//                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
+//                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
+//                    int finalI = i;
+//                }
+//                if (myOrder.itemsOrdered.get(i) instanceof Book) {
+//                    mediaInfo="Authors: " + ((Book) myOrder.itemsOrdered.get(i)).getAuthors() + "\n"
+//                            + "Category: " + myOrder.itemsOrdered.get(i).getCategory() + "\n"
+//                            + "Cost: " + myOrder.itemsOrdered.get(i).getCost() + "$\n"
+//                            + "ID: " + myOrder.itemsOrdered.get(i).getId_to_store();
+//                }
+//                order.add(new Order(i,mediaInfo));
+//            }
+//        }
+//        else{order.add(new Order(0,mediaInfo));}
+
+        order.add(new Order(0,"DVD, Authors:John Musker, Category:Animation, Title:Aladdin, cost:18.99"));
+        order.add(new Order(1,"CD, Authors:Aoyamo Gosho, Category:Detective, Title:Pokemon, cost:14.44"));
+        order.add(new Order(2,"CD, Authors:Aoyamo Gosho, Category:Detective, Title:Conan, cost:14.44"));
+        order.add(new Order(3,"DVD, Authors:George Lucas, Category:Science Fiction, Title:Star Wars, cost:24.95"));
 
         return order;
     }
