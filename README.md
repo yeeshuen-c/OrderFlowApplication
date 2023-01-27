@@ -1,4 +1,4 @@
-# OrderManagementProject
+# Order Management Application
 A simple GUI application for bookstore management, developed using Java and JavaFX.
 
 ## Objectives
