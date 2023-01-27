@@ -6,11 +6,15 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -53,6 +57,20 @@ public class Aims extends Application {
     TextField director, length, title, category, cost;
     TextField btitle, bcategory, bcost, bauthors;
     TextField cddirector, cdlength, cdtitle, cdcategory, cdcost,cdartist;
+    String password;
+    String nameField;
+    String action="";
+    @FXML
+    Label adminName;
+//    @FXML
+//    Label adminPass;
+//    @FXML
+//    Label adminAction;
+//    @FXML
+////    Button adminInfoBtn;
+    ObservableList<DigitalVideoDisc> dvds;
+    ObservableList<Book> books;
+    ObservableList<CompactDisc> cds;
 
 
     public static void main(String[] args) {
@@ -182,7 +200,7 @@ public class Aims extends Application {
     }
 
     public ObservableList<DigitalVideoDisc> getDVD(){
-        ObservableList<DigitalVideoDisc> dvds= FXCollections.observableArrayList();
+        dvds= FXCollections.observableArrayList();
         dvds.add(new DigitalVideoDisc("Roger Allers",87,"The Lion King","Animation",19.95f));
         dvds.add(new DigitalVideoDisc("George Lucas",124,"Star Wars","Science Fiction",24.95f));
         dvds.add(new DigitalVideoDisc("John Musker",90,"Aladdin","Animation",18.99f));
@@ -190,7 +208,7 @@ public class Aims extends Application {
         return dvds;
     }
     public ObservableList<Book> getBook(){
-        ObservableList<Book> books= FXCollections.observableArrayList();
+        books= FXCollections.observableArrayList();
         author.add("Nguyen Dinh Tri");
         author.add("Tran viet Dung");
         author.add("Tran Xuan Hien");
@@ -208,7 +226,7 @@ public class Aims extends Application {
         return books;
     }
     public ObservableList<CompactDisc> getCD(){
-        ObservableList<CompactDisc> cds= FXCollections.observableArrayList();
+        cds= FXCollections.observableArrayList();
         cds.add(new CompactDisc("Aoyama Gosho", "Conan", 120, "Conan", "Detective", 14.4f));
         cds.add(new CompactDisc("Fujiko F.Fujio", "Doraemon", 120,"Doraemon","Cartoon and Science Fiction",14.4f));
         cds.add(new CompactDisc("Aoyama Gosho", "Pokemon", 120, "Pokemon", "Detective", 14.4f));
@@ -310,8 +328,8 @@ public class Aims extends Application {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                String nameField=name.getText().toString();
-                String password = passwordField.getText().toString();
+                nameField=name.getText().toString();
+                password = passwordField.getText().toString();
                 if(name.getText().isEmpty()) {
                     showAlert(Alert.AlertType.ERROR, "InputError!",
                             "Please enter your user name. ");
@@ -450,10 +468,31 @@ public class Aims extends Application {
         HBox bookBtnHb= new HBox();
         bookBtnHb.setPadding(new Insets(10,10,10,10));
         bookBtnHb.setSpacing(10);
+        //search bar
+        HBox booksearchHb= new HBox();
+        Label booksearchLabel = new Label("key in item to search(analysis,lecture):");
+        booksearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+        TextField bookSearchText = new TextField();
+        booksearchHb.getChildren().addAll(booksearchLabel,bookSearchText);
+        FilteredList<Book>bookFilter= new FilteredList<>(books,b->true);
+        bookSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+            bookFilter.setPredicate(bookobj->{
+                if(newValue==null||newValue.isEmpty()) return true;
+                String lowerCase=newValue.toLowerCase();
+                if(bookobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else if(bookobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
+//                else if(bookobj.getAuthors().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else return false;
+            });
+        });
+        SortedList<Book> booksorted= new SortedList<>(bookFilter);
+        booksorted.comparatorProperty().bind(bookTable.comparatorProperty());
+        bookTable.setItems(booksorted);
         VBox bookTabVb = new VBox();
         bookBtnHb.getChildren().addAll(btitle, bcategory, bcost,bauthors,bookaddBtn,bookdelBtn);
-        bookTabVb.getChildren().addAll(bookTable,bookBtnHb);
+        bookTabVb.getChildren().addAll(booksearchHb,bookTable,bookBtnHb);
         Scene bookScene= new Scene(bookTabVb);
+
         //cd scene
         Button cdaddBtn= new Button("ADD");
         cdaddBtn.setOnAction(e -> cdAddBtn());
@@ -462,10 +501,32 @@ public class Aims extends Application {
         HBox cdBtnHb= new HBox();
         cdBtnHb.setPadding(new Insets(10,10,10,10));
         cdBtnHb.setSpacing(10);
+        //search bar
+        HBox cdsearchHb= new HBox();
+        Label cdsearchLabel = new Label("key in item to search(director,title,category,artist):");
+        cdsearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+        TextField cdSearchText = new TextField();
+        cdsearchHb.getChildren().addAll(cdsearchLabel,cdSearchText);
+        FilteredList<CompactDisc>cdFilter= new FilteredList<>(cds,b->true);
+        cdSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+            cdFilter.setPredicate(cdobj->{
+                if(newValue==null||newValue.isEmpty()) return true;
+                String lowerCase=newValue.toLowerCase();
+                if(cdobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else if(cdobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else if(cdobj.getDirector().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else if(cdobj.getArtist().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else return false;
+            });
+        });
+        SortedList<CompactDisc> cdsorted= new SortedList<>(cdFilter);
+        cdsorted.comparatorProperty().bind(cdTable.comparatorProperty());
+        cdTable.setItems(cdsorted);
         VBox cdTabVb = new VBox();
         cdBtnHb.getChildren().addAll(cddirector, cdlength, cdtitle, cdcategory, cdcost,cdartist,cdaddBtn,cddelBtn);
-        cdTabVb.getChildren().addAll(cdTable,cdBtnHb);
+        cdTabVb.getChildren().addAll(cdsearchHb,cdTable,cdBtnHb);
         Scene cdScene= new Scene(cdTabVb);
+
         //dvd scene
         Button dvdaddBtn= new Button("ADD");
         dvdaddBtn.setOnAction(e -> dvdAddBtn());
@@ -474,9 +535,30 @@ public class Aims extends Application {
         HBox dvdBtnHb= new HBox();
         dvdBtnHb.setPadding(new Insets(10,10,10,10));
         dvdBtnHb.setSpacing(10);
+        //search bar
+        HBox dvdsearchHb= new HBox();
+        Label dvdsearchLabel = new Label("key in item to search(director,title,category):");
+        dvdsearchLabel.setStyle("-fx-font: 25 System; -fx-font-weight: Bold; -fx-text-fill: #C1121F");
+        TextField dvdSearchText = new TextField();
+        dvdsearchHb.getChildren().addAll(dvdsearchLabel,dvdSearchText);
+        FilteredList<DigitalVideoDisc>dvdFilter= new FilteredList<>(dvds,b->true);
+        dvdSearchText.textProperty().addListener((observable,oldValue,newValue)->{
+            dvdFilter.setPredicate(dvdobj->{
+                if(newValue==null||newValue.isEmpty()) return true;
+                String lowerCase=newValue.toLowerCase();
+                if(dvdobj.getCategory().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else if(dvdobj.getTitle().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else if(dvdobj.getDirector().toLowerCase().indexOf(lowerCase) != -1) return true;
+                else return false;
+            });
+        });
+        SortedList<DigitalVideoDisc> sorted= new SortedList<>(dvdFilter);
+        sorted.comparatorProperty().bind(dvdTable.comparatorProperty());
+        dvdTable.setItems(sorted);
+
         VBox dvdTabVb = new VBox();
         dvdBtnHb.getChildren().addAll(director, length, title, category, cost,dvdaddBtn,dvddelBtn);
-        dvdTabVb.getChildren().addAll(dvdTable,dvdBtnHb);
+        dvdTabVb.getChildren().addAll(dvdsearchHb,dvdTable,dvdBtnHb);
         Scene dvdScene= new Scene(dvdTabVb);
 
         //table select buttons
@@ -522,11 +604,20 @@ public class Aims extends Application {
             dvdTabStg.setScene(dvdScene);
             dvdTabStg.show();
         });
+
         //btn for back to log in
         Button bckBtn= new Button("back to previous page");
         bckBtn.setMaxHeight(50);
         bckBtn.setMaxWidth(170);
-        bckBtn.setOnMouseClicked(e -> { primaryStage.setScene(logInScene); });
+//        Parent root = FXMLLoader.load(getClass().getResource("adminAction.fxml"));
+//        Scene AdminInfoScene = new Scene(root);
+        bckBtn.setOnMouseClicked(e -> {
+            primaryStage.setScene(logInScene);
+//            adminName.setText(nameField);
+//            adminPass.setText(password);
+//            adminAction.setText(action);
+        });
+//        adminInfoBtn.setOnMouseClicked(e -> primaryStage.setScene(logInScene));
 
         //test
         Scene orderScene= new Scene(orderTable);
@@ -1394,6 +1485,7 @@ public class Aims extends Application {
         dvdTable.getItems().add(dvd);
         cost.clear(); director.clear(); category.clear(); title.clear(); length.clear();
         dvdChoose.add(1);   //update ArrayList
+        action="added one DVD";
     }
     public void bookAddBtn(){
         Book bk= new Book();
@@ -1404,6 +1496,7 @@ public class Aims extends Application {
         bookTable.getItems().add(bk);
         btitle.clear(); bcategory.clear(); bcost.clear(); bauthors.clear();
         bookChoose.add(1);    //update ArrayList
+        action="added one book";
     }
     public void cdAddBtn(){
         CompactDisc cd=new CompactDisc();
@@ -1416,24 +1509,28 @@ public class Aims extends Application {
         cdTable.getItems().add(cd);
         cddirector.clear(); cdlength.clear(); cdtitle.clear(); cdcategory.clear(); cdcost.clear(); cdartist.clear();
         cdChoose.add(1);    //update ArrayList
+        action="added one CD";
     }
     public void dvdDelBtn(){
         ObservableList<DigitalVideoDisc> dvdSelect,alldvd;
         alldvd= dvdTable.getItems();
         dvdSelect = dvdTable.getSelectionModel().getSelectedItems();
         dvdSelect.forEach(alldvd::remove);
+        action="deleted one DVD";
     }
     public void bookDelBtn(){
         ObservableList<Book> bookSel,allbk;
         allbk=bookTable.getItems();
         bookSel=bookTable.getSelectionModel().getSelectedItems();
         bookSel.forEach(allbk::remove);
+        action="deleted one book";
     }
     public void cdDelBtn(){
         ObservableList<CompactDisc> cdSel,allcd;
         allcd=cdTable.getItems();
         cdSel=cdTable.getSelectionModel().getSelectedItems();
         cdSel.forEach(allcd::remove);
+        action="deleted one CD";
     }
     private static void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -1480,5 +1577,7 @@ public class Aims extends Application {
 
         return order;
     }
+
+
 }
 
